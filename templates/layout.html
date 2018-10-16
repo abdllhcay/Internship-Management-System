@@ -16,6 +16,17 @@
 
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="../static/jquery.min.js"></script>
+    <script src="../static/bootstrap.min.js"></script>
+    <script src="../static/metisMenu.min.js"></script>
+    <script src="../static/sb-admin-2.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../static/raphael.min.js"></script>
+    <script src="../static/morris.min.js"></script>
+    <script src="../static/morris-data.js"></script>
+
+    {% block header %}{% endblock header %}
 
 </head>
 <body>
@@ -251,10 +262,14 @@
                             </div>
                         </li>
                         <li>
-                            <a href="{{ url_for('student_registration') }}"><i class="fa fa-graduation-cap fa-fw"></i> Öğrenci Kaydı</a>
+                            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Öğrenci<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="{{ url_for('student_list') }}">Öğrenci Listesi</a></li>
+                                <li><li><a href="{{ url_for('student_registration') }}">Öğrenci Kayıt</a></li></li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="tables.html"><i class="fa fa-briefcase fa-fw"></i> Staj Kaydı</a>
+                            <a href="{{ url_for('internship_registration') }}"><i class="fa fa-briefcase fa-fw"></i> Staj Kayıt</a>
                         </li>
                         <li>
                             <a href="{{ url_for('settings') }}"><i class="fa fa-cog fa-fw"></i> Ayarlar</a>
@@ -264,17 +279,8 @@
             </div>
         </nav>
 
-        {% block content %}{% endblock %}
+        {% block content %}{% endblock content %}
 
     </div>
-    <script src="../static/jquery.min.js"></script>
-    <script src="../static/bootstrap.min.js"></script>
-    <script src="../static/metisMenu.min.js"></script>
-    <script src="../static/sb-admin-2.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="../static/raphael.min.js"></script>
-    <script src="../static/morris.min.js"></script>
-    <script src="../static/morris-data.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import LoginForm, StudentRegistrationForm, SettingsForm
+from forms import LoginForm, StudentRegistrationForm, SettingsForm, InternshipRegistrationForm
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "b8cd9b239722889da76ff55e8a2087a5"
@@ -25,13 +25,24 @@ def login():
     return render_template("login.html", title = "Giriş", form = form)
 
 
+@app.route("/student_list", methods = ["POST", "GET"])
+def student_list():
+    return render_template("student-list.html", title = "Öğrenci Listesi")
+
+
 @app.route("/student_registration", methods = ["POST", "GET"])
 def student_registration():
     form = StudentRegistrationForm()
     if form.validate_on_submit():
         pass
 
-    return render_template("student-registration.html", title = "Öğrenci Kaydı", form = form)
+    return render_template("student-registration.html", title = "Öğrenci Kayıt", form = form)
+
+
+@app.route("/internship_registration", methods = ["POST", "GET"])
+def internship_registration():
+    form = InternshipRegistrationForm()
+    return render_template("internship-registration.html", title = "Staj Kaydı", form = form)
 
 
 @app.route("/settings", methods = ["POST", "GET"])

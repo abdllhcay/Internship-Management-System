@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Staj Kayıt</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <!--<div class="panel panel-default">-->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form role="form" method="POST" action="">
+                                {{ form.hidden_tag() }}
+                                <div class="form-group row">
+                                    {{ form.grade.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.grade(class="form-control", placeholder="Sınıf") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.subject.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.subject(class="form-control") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.firm.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.firm(class="form-control") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.city.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.city(class="form-control") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.day.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.day(class="form-control", placeholder="Gün Sayısı") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.date.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.date(class="form-control") }}</div>
+                                </div>
+                                <button type="submit" class="btn btn-default">Kaydet</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <!--</div>-->
+        </div>
+    </div>
+{% endblock content %}

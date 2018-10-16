@@ -22,5 +22,14 @@ class StudentRegistrationForm(FlaskForm):
 class SettingsForm(FlaskForm):
     branch = StringField("Konu")
     members = StringField("Komisyon Üyesi")
-    date = DateField("Tarih", format='%d-%m-%Y')
+    date = DateField("Tarih", format = '%d-%m-%Y')
     firm = StringField("Kurum")
+
+
+class InternshipRegistrationForm(FlaskForm):
+    grade = IntegerField(u"Sınıf", validators = [DataRequired()])
+    firm = SelectField(u"Kurum Adı", choices = [("bga", "BGA"), ("linspark", "LINSPARK")])
+    city = SelectField(u"Şehir", choices = [("ist", "ISTANBUL")])
+    date = DateField(u"Tarih Aralığı", format = "%d-%m-%Y", validators = [DataRequired()])
+    day = IntegerField(u"Gün Sayısı", validators = [DataRequired()])
+    subject = SelectField(u"Konu", choices = [("yazilim", "YAZILIM")])
