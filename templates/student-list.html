@@ -32,33 +32,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>314039</td>
-                            <td>Abdullah ÇAY</td>
-                            <td>2. Öğretim</td>
-                            <td>90</td>
-                            <td>77</td>
-                            <td>TAMAMLADI</td>
-                            <td>Var</td>
-                        </tr>
-                        <tr>
-                            <td>314033</td>
-                            <td>Ali Emre KESKİN</td>
-                            <td>1. Öğretim</td>
-                            <td>30</td>
-                            <td>30</td>
-                            <td>TAMAMLAMADI</td>
-                            <td>Var</td>
-                        </tr>
-                        <tr>
-                            <td>314035</td>
-                            <td>Remzi SIKAR</td>
-                            <td>1. Öğretim</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>-</td>
-                            <td><a href="/internship_registration?no=314035" type="button" class="btn btn-primary btn-sm">Kayıt</a> </td>
-                        </tr>
+                        {% for row in results %}
+                            <tr>
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[1] }} {{ row[2] }}</td>
+                                <td>{{ row[3] }}. Öğretim</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                {% if row[6] == 1 %}
+                                    <td style="background-color:#5CB85C;"><font color="white"> TAMAMLADI</font></td>
+                                {% else %}
+                                    <td style="background-color:#D9534F;"><font color="white"> TAMAMLAMADI</font></td>
+                                {% endif %}
+                                {% if row[7] == 1 %}
+                                    <td>Var</td>
+                                {% else %}
+                                    <td><a href="/internship_registration?no={{ row[0] }}" type="button" class="btn btn-primary btn-sm">Kayıt</a> </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

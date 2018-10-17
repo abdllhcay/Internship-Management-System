@@ -2,15 +2,26 @@
 
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import LoginForm, StudentRegistrationForm, SettingsForm, InternshipRegistrationForm
+from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "b8cd9b239722889da76ff55e8a2087a5"
+app.config["MYSQL_DATABASE_USER"] = "root"
+app.config["MYSQL_DATABASE_DB"] = "internship_mng_system"
+
+mysql = MySQL(app)
+mysql.init_app(app)
+conn = mysql.connect()
+cursor = conn.cursor()
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    cursor.execute("SELECT * FROM student ORDER BY no ASC LIMIT 10")
+    results = cursor.fetchall()
+
+    return render_template("home.html", results = results)
 
 
 @app.route("/login", methods = ["POST", "GET"])
@@ -27,15 +38,23 @@ def login():
 
 @app.route("/student_list", methods = ["POST", "GET"])
 def student_list():
-    return render_template("student-list.html", title = "Öğrenci Listesi")
+    cursor.execute("SELECT * FROM student")
+    results = cursor.fetchall()
+    return render_template("student-list.html", title = "Öğrenci Listesi", results = results)
 
 
 @app.route("/student_registration", methods = ["POST", "GET"])
 def student_registration():
     form = StudentRegistrationForm()
     if form.validate_on_submit():
-        pass
-
+        try:
+            cursor.execute(
+                "INSERT INTO student(no, ad, soyad, program, total_day, accepted_day, status, record) VALUES ('" + form.no.data + "','" + form.name.data + "','" + form.surname.data + "','" + form.program.data + "',0, 0, 0, 0)")
+            conn.commit()
+            flash(u"Öğrenci kaydı başarıyla yapıldı.", "success")
+            return redirect(url_for("student_registration"))
+        except:
+            flash(u"Öğrenci daha önce kaydedilmiş.", "danger")
     return render_template("student-registration.html", title = "Öğrenci Kayıt", form = form)
 
 
@@ -53,4 +72,4 @@ def settings():
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True, host = "0.0.0.0")

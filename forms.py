@@ -13,10 +13,10 @@ class LoginForm(FlaskForm):
 
 
 class StudentRegistrationForm(FlaskForm):
-    no = IntegerField("Ogrenci No", validators = [DataRequired()])
-    name = StringField("Ad", validators = [DataRequired()])
-    surname = StringField("Soyad", validators = [DataRequired()])
-    program = SelectField("Program", choices = [("1", "1. Ogretim"), ("2", "2. Ogretim")])
+    no = StringField(u"Öğrenci No", validators = [DataRequired()])
+    name = StringField(u"Ad", validators = [DataRequired()])
+    surname = StringField(u"Soyad", validators = [DataRequired()])
+    program = SelectField(u"Program", choices = [("1", u"1. Öğretim"), ("2", u"2. Öğretim")])
 
 
 class SettingsForm(FlaskForm):
