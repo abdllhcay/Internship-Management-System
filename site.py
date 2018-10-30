@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import LoginForm, StudentRegistrationForm, SettingsForm, InternshipRegistrationForm
+from flask import Flask, render_template, url_for, flash, redirect, request
+from forms import LoginForm, StudentRegistrationForm, SettingsForm, InternshipRegistrationForm, SearchStudents
 from flaskext.mysql import MySQL
 
 app = Flask(__name__)
@@ -60,14 +60,23 @@ def student_registration():
 
 @app.route("/internship_registration", methods = ["POST", "GET"])
 def internship_registration():
-    form = InternshipRegistrationForm()
-    return render_template("internship-registration.html", title = "Staj Kaydı", form = form)
+    registration_form = InternshipRegistrationForm()
+    search_form = SearchStudents()
+    results = ""
+
+    if registration_form.validate_on_submit():
+        pass
+    elif search_form.validate_on_submit():
+        cursor.execute("SELECT * FROM student WHERE no='" + search_form.search.data + "'")
+        results = cursor.fetchall()
+
+    return render_template("internship-registration.html", title = "Staj Kaydı", registration_form = registration_form,
+                           search_form = search_form, results = results)
 
 
 @app.route("/settings", methods = ["POST", "GET"])
 def settings():
     form = SettingsForm()
-
     return render_template("settings.html", title = "Ayarlar", form = form)
 
 

@@ -12,33 +12,66 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-6">
+                            <h4 style="display:inline-block;float:left;">Öğrenciye ait bilgiler</h4>
+                            <form role="form" method="POST" action="" style="display:inline-block;float:right;">
+                                {{ search_form.hidden_tag() }}
+                                <div class="input-group custom-search-form">
+                                        {{ search_form.search(class="form-control", placeholder="Öğrenci No") }}
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                                </div>
+                            </form>
+                            <br><br><hr>
                             <form role="form" method="POST" action="">
-                                {{ form.hidden_tag() }}
+                                {{ registration_form.hidden_tag() }}
                                 <div class="form-group row">
-                                    {{ form.grade.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-10">{{ form.grade(class="form-control", placeholder="Sınıf") }}</div>
+                                    {{ registration_form.no.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.no(class="form-control", placeholder="Öğrenci No") }}</div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form.subject.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-10">{{ form.subject(class="form-control") }}</div>
+                                    {{ registration_form.name.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.name(class="form-control", placeholder="Adı") }}</div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form.firm.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-10">{{ form.firm(class="form-control") }}</div>
+                                    {{ registration_form.surname.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.surname(class="form-control", placeholder="Soyadı") }}</div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form.city.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-10">{{ form.city(class="form-control") }}</div>
+                                    {{ registration_form.program.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.program(class="form-control", placeholder="") }}</div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form.day.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-10">{{ form.day(class="form-control", placeholder="Gün Sayısı") }}</div>
+                                    {{ registration_form.grade.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.grade(class="form-control", placeholder="Sınıf") }}</div>
+                                </div>
+                                <br><h4>Staja ait bilgiler</h4><hr>
+                                <div class="form-group row">
+                                    {{ registration_form.subject.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.subject(class="form-control") }}</div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form.date.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-10">{{ form.date(class="form-control") }}</div>
+                                    {{ registration_form.firm.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.firm(class="form-control") }}</div>
                                 </div>
-                                <button type="submit" class="btn btn-default">Kaydet</button>
+                                <div class="form-group row">
+                                    {{ registration_form.city.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.city(class="form-control") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ registration_form.day.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.day(class="form-control", placeholder="Gün Sayısı") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ registration_form.date.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ registration_form.date(class="form-control") }}</div>
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-default">Kaydet</button>
+                                    <button type="reset" class="btn btn-default">Sıfırla</button>
+                                </div>
                             </form>
                         </div>
                     </div>

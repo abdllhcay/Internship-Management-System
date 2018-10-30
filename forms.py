@@ -27,9 +27,17 @@ class SettingsForm(FlaskForm):
 
 
 class InternshipRegistrationForm(FlaskForm):
+    no = StringField(u"Öğrenci No", validators = [DataRequired()])
+    name = StringField(u"Ad", validators = [DataRequired()])
+    surname = StringField(u"Soyad", validators = [DataRequired()])
+    program = SelectField(u"Program", choices = [("1", u"1. Öğretim"), ("2", u"2. Öğretim")])
     grade = IntegerField(u"Sınıf", validators = [DataRequired()])
     firm = SelectField(u"Kurum Adı", choices = [("bga", "BGA"), ("linspark", "LINSPARK")])
     city = SelectField(u"Şehir", choices = [("ist", "ISTANBUL")])
     date = DateField(u"Tarih Aralığı", format = "%d-%m-%Y", validators = [DataRequired()])
     day = IntegerField(u"Gün Sayısı", validators = [DataRequired()])
     subject = SelectField(u"Konu", choices = [("yazilim", "YAZILIM")])
+
+class SearchStudents(FlaskForm):
+    search = StringField('search', [DataRequired()])
+    submit = SubmitField('Search', render_kw = {'class': 'btn btn-success btn-block'})
