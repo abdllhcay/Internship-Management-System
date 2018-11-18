@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 
 from flask import Flask, render_template, url_for, flash, redirect, request
-from forms import LoginForm, StudentRegistrationForm, SettingsForm, InternshipRegistrationForm, SearchStudents
+from forms import Login, StudentRegistration, Settings, InternshipRegistration, SearchStudents, Interview
 from flaskext.mysql import MySQL
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ def home():
 
 @app.route("/login", methods = ["POST", "GET"])
 def login():
-    form = LoginForm()
+    form = Login()
     if form.validate_on_submit():
         if form.username.data == "admin" and form.passwd.data == "1":
             return redirect(url_for("home"))
@@ -45,7 +45,7 @@ def student_list():
 
 @app.route("/student_registration", methods = ["POST", "GET"])
 def student_registration():
-    form = StudentRegistrationForm()
+    form = StudentRegistration()
     if form.validate_on_submit():
         try:
             cursor.execute(
@@ -60,23 +60,42 @@ def student_registration():
 
 @app.route("/internship_registration", methods = ["POST", "GET"])
 def internship_registration():
-    registration_form = InternshipRegistrationForm()
+    registration_form = InternshipRegistration()
     search_form = SearchStudents()
     results = ""
+    no = request.args.get("no")
 
-    if registration_form.validate_on_submit():
-        pass
-    elif search_form.validate_on_submit():
-        cursor.execute("SELECT * FROM student WHERE no='" + search_form.search.data + "'")
+    if no:
+        cursor.execute("SELECT * FROM student WHERE no='" + no + "'")
         results = cursor.fetchall()
+
+        if registration_form.validate_on_submit():
+            try:
+                cursor.execute(
+                    "INSERT INTO intern(no, konu, kurum, sehir) VALUES ('" + no + "','" + registration_form.subject.data + "','" + registration_form.firm.data + "','" + registration_form.city.data + "')")
+                conn.commit()
+                return redirect(url_for("internship_registration"))
+            except:
+                flash(u"Öğrenci daha önce kaydedilmiş.", "danger")
 
     return render_template("internship-registration.html", title = "Staj Kaydı", registration_form = registration_form,
                            search_form = search_form, results = results)
 
 
+@app.route("/interview", methods = ["POST", "GET"])
+def interview():
+    return render_template("interview.html")
+
+
+@app.route("/do_interview", methods = ["POST", "GET"])
+def do_interview():
+    form = Interview()
+    return render_template("do-interview.html", form = form)
+
+
 @app.route("/settings", methods = ["POST", "GET"])
 def settings():
-    form = SettingsForm()
+    form = Settings()
     return render_template("settings.html", title = "Ayarlar", form = form)
 
 

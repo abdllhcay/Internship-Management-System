@@ -262,6 +262,9 @@
                             </div>
                         </li>
                         <li>
+                            <a href="{{ url_for('home') }}"><i class="fa fa-desktop fa-fw"></i> Panel</a>
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Öğrenci<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="{{ url_for('student_list') }}">Öğrenci Listesi</a></li>
@@ -270,6 +273,9 @@
                         </li>
                         <li>
                             <a href="{{ url_for('internship_registration') }}"><i class="fa fa-briefcase fa-fw"></i> Staj Kayıt</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('interview') }}"><i class="fa fa-pencil fa-fw"></i> Değerlendirme</a>
                         </li>
                         <li>
                             <a href="{{ url_for('settings') }}"><i class="fa fa-cog fa-fw"></i> Ayarlar</a>
@@ -296,6 +302,7 @@
                 {% endif %}
             {% endwith %}
         </div>
+    <br><br><br><br>
     </div>
 </body>
 </html>
