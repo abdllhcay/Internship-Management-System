@@ -3,6 +3,11 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
 from forms import Login, StudentRegistration, Settings, InternshipRegistration, SearchStudents, Interview
 from flaskext.mysql import MySQL
+import logging
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "b8cd9b239722889da76ff55e8a2087a5"
@@ -14,6 +19,7 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
+logging.basicConfig(level = logging.ERROR, filename = "error.log", filemode = "a", format = '%(asctime)s:%(levelname)s:%(message)s', datefmt='%d-%m-%y %H:%M:%S')
 
 @app.route("/")
 @app.route("/home")
@@ -53,7 +59,8 @@ def student_registration():
             conn.commit()
             flash(u"Öğrenci kaydı başarıyla yapıldı.", "success")
             return redirect(url_for("student_registration"))
-        except:
+        except Exception as e:
+            logging.error(e)
             flash(u"Öğrenci daha önce kaydedilmiş.", "danger")
     return render_template("student-registration.html", title = "Öğrenci Kayıt", form = form)
 
@@ -65,6 +72,10 @@ def internship_registration():
     results = ""
     no = request.args.get("no")
 
+    cursor.execute("SELECT * FROM sehirler")
+    cities = cursor.fetchall()
+    registration_form.city.choices = [(city[1], city[1]) for city in cities]
+
     if no:
         cursor.execute("SELECT * FROM student WHERE no='" + no + "'")
         results = cursor.fetchall()
@@ -72,25 +83,26 @@ def internship_registration():
         if registration_form.validate_on_submit():
             try:
                 cursor.execute(
-                    "INSERT INTO intern(no, konu, kurum, sehir) VALUES ('" + no + "','" + registration_form.subject.data + "','" + registration_form.firm.data + "','" + registration_form.city.data + "')")
+                    "INSERT INTO intern(no, konu, kurum, sehir) VALUES ('" + no + "','" + registration_form.subject.data + "','" + registration_form.firm.data + "','" + str(registration_form.city.data) + "')")
                 conn.commit()
                 return redirect(url_for("internship_registration"))
-            except:
+            except Exception as e:
+                logging.error(e)
                 flash(u"Öğrenci daha önce kaydedilmiş.", "danger")
 
     return render_template("internship-registration.html", title = "Staj Kaydı", registration_form = registration_form,
                            search_form = search_form, results = results)
 
 
-@app.route("/interview", methods = ["POST", "GET"])
-def interview():
-    return render_template("interview.html")
+@app.route("/appointment", methods = ["POST", "GET"])
+def appointment():
+    return render_template("appointment.html")
 
 
 @app.route("/do_interview", methods = ["POST", "GET"])
 def do_interview():
     form = Interview()
-    return render_template("do-interview.html", form = form)
+    return render_template("do-appointment.html", form = form)
 
 
 @app.route("/settings", methods = ["POST", "GET"])

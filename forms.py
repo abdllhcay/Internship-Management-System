@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired
 
 
 class Login(FlaskForm):
@@ -29,7 +29,7 @@ class Settings(FlaskForm):
 class InternshipRegistration(FlaskForm):
     grade = IntegerField(u"Sınıf", validators = [DataRequired()])
     firm = SelectField(u"Kurum Adı", choices = [("bga", "BGA"), ("linspark", "LINSPARK")])
-    city = SelectField(u"Şehir", choices = [("ist", "ISTANBUL")])
+    city = SelectField(u"Şehir")
     date = StringField(u"Tarih Aralığı", validators = [DataRequired()])
     day = IntegerField(u"Gün Sayısı", validators = [DataRequired()])
     subject = SelectField(u"Konu", choices = [("yazilim", "YAZILIM")])
@@ -41,16 +41,16 @@ class SearchStudents(FlaskForm):
 
 
 class Interview(FlaskForm):
-    continuity = SelectField(u"Devam", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
+    continuity = SelectField(u"Devam", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default = 5,
                              validators = [DataRequired()])
-    work = SelectField(u"Çaba ve çalışma", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
+    work = SelectField(u"Çaba ve çalışma", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default = 5,
                        validators = [DataRequired()])
-    time = SelectField(u"İşi vaktinde yapma", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
+    time = SelectField(u"İşi vaktinde yapma", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default = 5,
                        validators = [DataRequired()])
-    chief = SelectField(u"Amire karşı davranış", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
+    chief = SelectField(u"Amire karşı davranış", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default = 5,
                         validators = [DataRequired()])
     co_worker = SelectField(u"İş arkadaşlarına karşı davranış", choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
-                            validators = [DataRequired()])
+                            default = 5, validators = [DataRequired()])
     prove = IntegerField(u"İspat", validators = [DataRequired()])
     order = IntegerField(u"Düzen", validators = [DataRequired()])
     presentation = IntegerField(u"Sunum", validators = [DataRequired()])

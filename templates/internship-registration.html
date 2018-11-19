@@ -32,19 +32,19 @@
                             {% if results %}
                                 {% for row in results %}
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label", style="font-weight:normal;">Öğrenci No</label>
+                                        <label class="col-sm-2 col-form-label" style="font-weight:normal;">Öğrenci No</label>
                                         <div class="col-sm-10"><input type="text" class="form-control" placeholder="Öğrenci no" value="{{ row[0] }}"></div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label", style="font-weight:normal;">Adı</label>
+                                        <label class="col-sm-2 col-form-label" style="font-weight:normal;">Adı</label>
                                         <div class="col-sm-10"><input type="text" class="form-control" placeholder="Adı" value="{{ row[1] }}"></div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label", style="font-weight:normal;">Soyadı</label>
+                                        <label class="col-sm-2 col-form-label" style="font-weight:normal;">Soyadı</label>
                                         <div class="col-sm-10"><input type="text" class="form-control" placeholder="Soyadı" value="{{ row[2] }}"></div>
                                     </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label", style="font-weight:normal;">Program</label>
+                                            <label class="col-sm-2 col-form-label" style="font-weight:normal;">Program</label>
                                             <div class="col-sm-10"><select class="form-control">
                                                 {% if row[3] == 1 %}
                                                     <option value="1. Öğretim">1. Öğretim</option>
@@ -56,19 +56,19 @@
                                 {% endfor %}
                             {% else %}
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label", style="font-weight:normal;">Öğrenci No</label>
+                                    <label class="col-sm-2 col-form-label" style="font-weight:normal;">Öğrenci No</label>
                                     <div class="col-sm-10" ><input class="form-control" type="text" placeholder="Öğrenci no" disabled></div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label", style="font-weight:normal;">Ad</label>
+                                    <label class="col-sm-2 col-form-label" style="font-weight:normal;">Ad</label>
                                     <div class="col-sm-10"><input class="form-control" type="text" placeholder="Ad" disabled></div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label", style="font-weight:normal;">Soyad</label>
+                                    <label class="col-sm-2 col-form-label" style="font-weight:normal;">Soyad</label>
                                     <div class="col-sm-10"><input class="form-control" type="text" placeholder="Soyad" disabled></div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label", style="font-weight:normal;">Program</label>
+                                    <label class="col-sm-2 col-form-label" style="font-weight:normal;">Program</label>
                                     <div class="col-sm-10"><select class="form-control" disabled></select></div>
                                 </div>
                             {% endif %}
@@ -109,4 +109,5 @@
             </div>
         </div>
     </div>
+
 {% endblock content %}
