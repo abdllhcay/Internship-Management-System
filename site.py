@@ -19,7 +19,9 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
-logging.basicConfig(level = logging.ERROR, filename = "error.log", filemode = "a", format = '%(asctime)s:%(levelname)s:%(message)s', datefmt='%d-%m-%y %H:%M:%S')
+logging.basicConfig(level = logging.ERROR, filename = "error.log", filemode = "a",
+                    format = '%(asctime)s:%(levelname)s:%(message)s', datefmt = '%d-%m-%y %H:%M:%S')
+
 
 @app.route("/")
 @app.route("/home")
@@ -75,6 +77,9 @@ def internship_registration():
     cursor.execute("SELECT * FROM sehirler")
     cities = cursor.fetchall()
     registration_form.city.choices = [(city[1], city[1]) for city in cities]
+    cursor.execute("SELECT * FROM firmalar ORDER BY firmaAdi ASC")
+    firms = cursor.fetchall()
+    registration_form.firm.choices = [(firm[1], firm[1]) for firm in firms]
 
     if no:
         cursor.execute("SELECT * FROM student WHERE no='" + no + "'")
@@ -83,7 +88,8 @@ def internship_registration():
         if registration_form.validate_on_submit():
             try:
                 cursor.execute(
-                    "INSERT INTO intern(no, konu, kurum, sehir) VALUES ('" + no + "','" + registration_form.subject.data + "','" + registration_form.firm.data + "','" + str(registration_form.city.data) + "')")
+                    "INSERT INTO intern(no, konu, kurum, sehir) VALUES ('" + no + "','" + registration_form.subject.data + "','" + registration_form.firm.data + "','" + str(
+                        registration_form.city.data) + "')")
                 conn.commit()
                 return redirect(url_for("internship_registration"))
             except Exception as e:
@@ -107,8 +113,30 @@ def do_interview():
 
 @app.route("/settings", methods = ["POST", "GET"])
 def settings():
-    form = Settings()
-    return render_template("settings.html", title = "Ayarlar", form = form)
+    settings_form = Settings()
+
+    cursor.execute("SELECT * FROM firmalar ORDER BY firmaAdi ASC")
+    firms = cursor.fetchall()
+    settings_form.firm.choices = [(firm[1], firm[1]) for firm in firms]
+    cursor.execute("SELECT * FROM konular")
+    subjects = cursor.fetchall()
+    settings_form.subject.choices = [(subject[1], subject[1]) for subject in subjects]
+
+    if settings_form.validate_on_submit():
+        if settings_form.add_firm.data is not None:
+            try:
+                cursor.execute("INSERT INTO firmalar(firmaAdi) SELECT * FROM (SELECT '" + settings_form.add_firm.data.upper() + "') AS tmp WHERE NOT EXISTS (SELECT firmaAdi FROM firmalar WHERE firmaAdi='" + settings_form.add_firm.data.upper() + "') LIMIT 1 ")
+                conn.commit()
+                return redirect(url_for("settings"))
+            except Exception as e:
+                logging.error(e)
+        elif settings_form.add_subject:
+            cursor.execute("INSERT INTO konular(konu) SELECT * FROM (SELECT '" + settings_form.add_subject.data.upper() + "') AS tmp WHERE NOT EXISTS (SELECT konu FROM konular WHERE konu='" + settings_form.add_subject.data.upper() + "') LIMIT 1 ")
+            conn.commit()
+            return redirect(url_for("settings"))
+
+
+    return render_template("settings.html", title = "Ayarlar", form = settings_form)
 
 
 if __name__ == "__main__":

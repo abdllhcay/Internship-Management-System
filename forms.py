@@ -20,10 +20,12 @@ class StudentRegistration(FlaskForm):
 
 
 class Settings(FlaskForm):
-    branch = StringField("Konu")
-    members = StringField("Komisyon Üyesi")
+    members = StringField(u"Komisyon Üyesi")
     date = DateField("Tarih", format = '%d-%m-%Y')
-    firm = StringField("Kurum")
+    firm = SelectField("Kurum")
+    subject = SelectField("Konu")
+    add_firm = StringField("Kurum")
+    add_subject = StringField("Konu")
 
 
 class InternshipRegistration(FlaskForm):

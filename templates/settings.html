@@ -12,14 +12,10 @@
             <form role="form" method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    <select class="form-control">
-                    <option value="1">BİLGİSAYAR BİLİMLERİ</option>
-                    <option value="2">BİLGİSAYAR DONANIMI</option>
-                    <option value="3">BİLGİSAYAR YAZILIMI</option>
-                </select>
+                    {{ form.subject(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    {{ form.branch(class="form-control", placeholder="Konu ekle") }}
+                    {{ form.add_subject(class="form-control", placeholder="Konu ekle") }}
                 </div>
                 <button type="submit" class="btn btn-default">Ekle</button>
             </form>
@@ -32,13 +28,10 @@
             <form role="form" method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    <select class="form-control">
-                    <option value="1">BGA BİLGİ GÜVENLİĞİ A.Ş.</option>
-                    <option value="2">LİNSPARK BİLİŞİM TEKNOLOJİLERİ</option>
-                </select>
+                    {{ form.firm(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    {{ form.firm(class="form-control", placeholder="Firma ekle") }}
+                    {{ form.add_firm(class="form-control", placeholder="Firma ekle") }}
                 </div>
                 <button type="submit" class="btn btn-default">Ekle</button>
             </form>
