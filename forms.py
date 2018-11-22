@@ -22,10 +22,8 @@ class StudentRegistration(FlaskForm):
 class Settings(FlaskForm):
     members = StringField(u"Komisyon Üyesi")
     date = DateField("Tarih", format = '%d-%m-%Y')
-    firm = SelectField("Kurum")
-    subject = SelectField("Konu")
-    add_firm = StringField("Kurum")
-    add_subject = StringField("Konu")
+    new_firm = StringField("Kurum")
+    new_subject = StringField("Konu")
 
 
 class InternshipRegistration(FlaskForm):
@@ -34,7 +32,7 @@ class InternshipRegistration(FlaskForm):
     city = SelectField(u"Şehir")
     date = StringField(u"Tarih Aralığı", validators = [DataRequired()])
     day = IntegerField(u"Gün Sayısı", validators = [DataRequired()])
-    subject = SelectField(u"Konu", choices = [("yazilim", "YAZILIM")])
+    subject = SelectField(u"Konu")
 
 
 class SearchStudents(FlaskForm):

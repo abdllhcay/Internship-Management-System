@@ -37,18 +37,13 @@
                                 <td>{{ row[0] }}</td>
                                 <td>{{ row[1] }} {{ row[2] }}</td>
                                 <td>{{ row[3] }}. Öğretim</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                {% if row[6] == 1 %}
-                                    <td style="background-color:#5CB85C;"><font color="white"> TAMAMLADI</font></td>
-                                {% else %}
-                                    <td style="background-color:#D9534F;"><font color="white"> TAMAMLAMADI</font></td>
-                                {% endif %}
-                                {% if row[7] == 1 %}
-                                    <td></td>
-                                {% else %}
-                                    <td><a href="/internship_registration?no={{ row[0] }}" type="button" class="btn btn-primary btn-xs">Staj Kayıt</a> </td>
-                                {% endif %}
+                                {% for i in range(4,8) %}
+                                    {% if row[i] == None %}
+                                        <td>-</td>
+                                    {% else %}
+                                        <td>{{ row[i] }}</td>
+                                    {% endif %}
+                                {% endfor %}
                             </tr>
                         {% endfor %}
                     </tbody>

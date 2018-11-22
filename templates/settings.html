@@ -9,13 +9,17 @@
     <div class="row">
         <div class="col-sm-4">
             <h4>Konular</h4>
-            <form role="form" method="POST" action="">
+            <form role="form" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    {{ form.subject(class="form-control") }}
+                    <select class="form-control">
+                        {% for subject in subjects %}
+                                <option value="{{ subject[1] }}">{{ subject[1] }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group">
-                    {{ form.add_subject(class="form-control", placeholder="Konu ekle") }}
+                    {{ form.new_subject(class="form-control", placeholder="Konu ekle") }}
                 </div>
                 <button type="submit" class="btn btn-default">Ekle</button>
             </form>
@@ -25,13 +29,17 @@
     <div class="row">
         <div class="col-sm-4">
             <h4>Firmalar</h4>
-            <form role="form" method="POST" action="">
+            <form role="form" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    {{ form.firm(class="form-control") }}
+                    <select class="form-control">
+                        {% for firm in firms %}
+                                <option value="{{ firm[1] }}">{{ firm[1] }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group">
-                    {{ form.add_firm(class="form-control", placeholder="Firma ekle") }}
+                    {{ form.new_firm(class="form-control", placeholder="Firma ekle") }}
                 </div>
                 <button type="submit" class="btn btn-default">Ekle</button>
             </form>
