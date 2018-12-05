@@ -1,11 +1,12 @@
 # -*- coding:utf8 -*-
 
 from flask import Flask, render_template, url_for, flash, redirect, request
-from forms import Login, StudentRegistration, Settings, InternshipRegistration, SearchStudents, Interview
+from forms import Login, StudentRegistration, Settings, InternshipRegistration, SearchStudents, Interview, Appointment
 from flaskext.mysql import MySQL
 import logging
 import sys
 import datetime
+import random
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -70,13 +71,14 @@ def student_registration():
     if form.validate_on_submit():
         try:
             cursor.execute(
-                "INSERT INTO student(no, ad, soyad, program, total_day, accepted_day, status, record) VALUES ('" + form.no.data + "','" + form.name.data + "','" + form.surname.data + "','" + form.program.data + "',0, 0, 0, 0)")
+                "INSERT INTO student(no, ad, soyad, program, total_day, accepted_day, status, record) VALUES ('%s', '%s', '%s', '%s', 0, 0, 0, 0)" % (
+                form.no.data, form.name.data, form.surname.data, form.program.data))
             conn.commit()
             flash(u"Öğrenci kaydı başarıyla yapıldı.", "success")
             return redirect(url_for("student_registration"))
         except Exception as e:
             logging.error(e)
-            flash(u"Öğrenci daha önce kaydedilmiş.", "danger")
+            flash(u"Bir hata oluştu! Öğrenci daha önce kaydedildi mi?", "danger")
     return render_template("student-registration.html", title = "Öğrenci Kayıt", form = form)
 
 
@@ -87,6 +89,7 @@ def internship_registration():
     search_form = SearchStudents()
     results = ""
     no = request.args.get("no")
+    #firm = request.args.get("new_firm")
 
     cursor.execute("SELECT * FROM sehirler")
     cities = cursor.fetchall()
@@ -102,15 +105,31 @@ def internship_registration():
         cursor.execute("SELECT * FROM student WHERE no='" + no + "'")
         results = cursor.fetchall()
 
-        if registration_form.validate_on_submit():
-            try:
-                cursor.execute("INSERT INTO intern(no, konu, kurum, sehir) VALUES ('" + no + "','" + registration_form.subject.data + "','" + registration_form.firm.data + "','" + str(registration_form.city.data) + "')")
-                cursor.execute("INSERT INTO randevu(ogrNo) VALUES ('" + no + "')")
-                conn.commit()
-                return redirect(url_for("internship_registration"))
-            except Exception as e:
-                logging.error(e)
-                flash(u"Bir hata oluştu: " + str(e[1]), "danger")
+        if results:
+            if registration_form.validate_on_submit():
+                stajID = random.randint(100000000, 999999999)
+                start_date = str(registration_form.start_date.data)[-2:] + "-" + str(registration_form.start_date.data)[5:7] + "-" + str(registration_form.start_date.data)[:4]
+                end_date = str(registration_form.finish_date.data)[-2:] + "-" + str(registration_form.finish_date.data)[5:7] + "-" + str(registration_form.finish_date.data)[:4]
+                try:
+                    cursor.execute("INSERT INTO staj(stajID, ogrNo, firma, sehir, konu, gun, basTarih, bitTarih, sinif, degerlendirme) VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" %(stajID, no, registration_form.firm.data, str(registration_form.city.data), registration_form.subject.data, str(registration_form.day.data), start_date, end_date, str(registration_form.grade.data), "0"))
+                    cursor.execute("INSERT INTO randevu(ogrNo) VALUES ('%s')" %no)
+                    conn.commit()
+                    flash(u"Staj kaydı başarıyla yapıldı.", "success")
+                    return redirect(url_for("internship_registration"))
+                except Exception as e:
+                    logging.error(e)
+                    flash(u"Bir hata oluştu", "danger")
+        else:
+            flash(u"Öğrenci bulunamadı!", "danger")
+
+    # elif firm:
+    #     try:
+    #         cursor.execute(
+    #             "INSERT INTO firmalar(firmaAdi) SELECT * FROM (SELECT '" + firm.upper() + "') AS tmp WHERE NOT EXISTS (SELECT firmaAdi FROM firmalar WHERE firmaAdi='" + firm.upper() + "') LIMIT 1 ")
+    #         conn.commit()
+    #         return redirect(url_for("settings"))
+    #     except Exception as e:
+    #         logging.error(e)
 
     return render_template("internship-registration.html", title = "Staj Kaydı", registration_form = registration_form,
                            search_form = search_form, results = results)
@@ -119,16 +138,34 @@ def internship_registration():
 ## Randevu sayfası
 @app.route("/appointment", methods = ["POST", "GET"])
 def appointment():
-    cursor.execute("SELECT student.no, student.ad, student.soyad, student.program, randevu.tarih, randevu.saat, randevu.ku1, randevu.ku2 FROM intern JOIN randevu ON intern.no=randevu.ogrNo JOIN student ON randevu.ogrNo=student.no WHERE intern.tarih='" + str(datetime.date.today().year) + "' AND intern.degerlendirme=0")
-    results = cursor.fetchall()
-    return render_template("appointment.html", results = results)
+    appointment_form = Appointment()
+
+    cursor.execute("SELECT * FROM komisyon_uyeleri ORDER BY ad DESC")
+    members = cursor.fetchall()
+    appointment_form.ku1.choices=[(member[1], member[1]) for member in members]
+    appointment_form.ku2.choices = [(member[1], member[1]) for member in members]
+
+    if appointment_form.validate_on_submit():
+        try:
+            cursor.execute("UPDATE randevu SET tarih='%s', saat='%s', ku1='%s', ku2='%s' WHERE ogrNo='%s'" % (appointment_form.date.data, appointment_form.time.data, appointment_form.ku1.data, appointment_form.ku2.data, appointment_form.ogr_no.data))
+            conn.commit()
+        except Exception as e:
+            logging.error(e)
+    try:
+        cursor.execute(
+            "SELECT student.no, student.ad, student.soyad, student.program, randevu.tarih, randevu.saat, randevu.ku1, randevu.ku2 FROM staj JOIN randevu ON staj.ogrNo=randevu.ogrNo JOIN student ON randevu.ogrNo=student.no WHERE staj.basTarih='%s' AND staj.degerlendirme=0" % datetime.date.today().year)
+        results = cursor.fetchall()
+    except Exception as e:
+        logging.error(e)
+
+    return render_template("appointment.html", results = results, appointment_form = appointment_form)
 
 
 ## Mülakat kayıt sayfası
 @app.route("/do_interview", methods = ["POST", "GET"])
 def do_interview():
     form = Interview()
-    return render_template("do-appointment.html", form = form)
+    return render_template("do-interview.html", form = form)
 
 
 ## Ayarlar sayfası
@@ -140,9 +177,12 @@ def settings():
     firms = cursor.fetchall()
     cursor.execute("SELECT * FROM konular")
     subjects = cursor.fetchall()
+    cursor.execute("SELECT * FROM komisyon_uyeleri ORDER BY ad DESC")
+    members = cursor.fetchall()
 
     subject = request.args.get("new_subject")
     firm = request.args.get("new_firm")
+    member = request.args.get("new_member")
 
     if subject:
         try:
@@ -160,8 +200,17 @@ def settings():
             return redirect(url_for("settings"))
         except Exception as e:
             logging.error(e)
+    elif member:
+        try:
+            cursor.execute(
+                "INSERT INTO komisyon_uyeleri(ad) SELECT * FROM (SELECT '" + member.upper() + "') AS tmp WHERE NOT EXISTS (SELECT ad FROM komisyon_uyeleri WHERE ad='" + member.upper() + "') LIMIT 1 ")
+            conn.commit()
+            return redirect(url_for("settings"))
+        except Exception as e:
+            logging.error(e)
 
-    return render_template("settings.html", title = "Ayarlar", form = settings_form, firms = firms, subjects = subjects)
+    return render_template("settings.html", title = "Ayarlar", form = settings_form, firms = firms, subjects = subjects,
+                           members = members)
 
 
 if __name__ == "__main__":

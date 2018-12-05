@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, DateField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, DateField, HiddenField
 from wtforms.validators import DataRequired
 
 
@@ -20,7 +20,7 @@ class StudentRegistration(FlaskForm):
 
 
 class Settings(FlaskForm):
-    members = StringField(u"Komisyon Üyesi")
+    new_member = StringField(u"Komisyon Üyesi")
     date = DateField("Tarih", format = '%d-%m-%Y')
     new_firm = StringField("Kurum")
     new_subject = StringField("Konu")
@@ -28,9 +28,11 @@ class Settings(FlaskForm):
 
 class InternshipRegistration(FlaskForm):
     grade = IntegerField(u"Sınıf", validators = [DataRequired()])
-    firm = SelectField(u"Kurum Adı", choices = [("bga", "BGA"), ("linspark", "LINSPARK")])
+    firm = SelectField(u"Firma Adı")
+    new_firm = StringField(u"Firma ekle")
     city = SelectField(u"Şehir")
-    date = StringField(u"Tarih Aralığı", validators = [DataRequired()])
+    start_date = DateField(u"Başlangıç Tarihi", validators = [DataRequired()])
+    finish_date = DateField(u"Bitiş Tarihi", validators = [DataRequired()])
     day = IntegerField(u"Gün Sayısı", validators = [DataRequired()])
     subject = SelectField(u"Konu")
 
@@ -56,3 +58,11 @@ class Interview(FlaskForm):
     presentation = IntegerField(u"Sunum", validators = [DataRequired()])
     content = IntegerField(u"İçerik", validators = [DataRequired()])
     interview = IntegerField(u"Mülakat", validators = [DataRequired()])
+
+
+class Appointment(FlaskForm):
+    date = DateField(u"Tarih", validators = [DataRequired()])
+    time = StringField(u"Saat", validators = [DataRequired()])
+    ku1 = SelectField(u"Komisyon üyesi 1", validators = [DataRequired()])
+    ku2 = SelectField(u"Komisyon üyesi 2", validators = [DataRequired()])
+    ogr_no = HiddenField()

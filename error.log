@@ -1,14 +1,6 @@
-19-11-18 11:22:03:ERROR:'NoneType' object has no attribute 'upper'
-22-11-18 09:00:09:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:01:12:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:01:21:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:01:34:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:01:58:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:02:04:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:02:09:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:02:12:ERROR:(1062, u"Duplicate entry '231397' for key 'PRIMARY'")
-22-11-18 09:03:23:ERROR:(1062, u"Duplicate entry '314039' for key 'PRIMARY'")
-22-11-18 09:03:31:ERROR:(1062, u"Duplicate entry '314039' for key 'PRIMARY'")
-22-11-18 09:03:39:ERROR:(1062, u"Duplicate entry '314039' for key 'PRIMARY'")
-22-11-18 09:03:41:ERROR:(1062, u"Duplicate entry '314039' for key 'PRIMARY'")
-22-11-18 09:04:20:ERROR:(1054, u"Unknown column 'no' in 'field list'")
+04-12-18 22:47:55:ERROR:-----------------
+04-12-18 22:49:16:ERROR:-----------------
+04-12-18 22:50:26:ERROR:-----------------
+04-12-18 22:51:01:ERROR:--------None---------
+04-12-18 22:51:25:ERROR:cannot concatenate 'str' and 'NoneType' objects
+04-12-18 23:25:49:ERROR:--------2018-12-06---------
