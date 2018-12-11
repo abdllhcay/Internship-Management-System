@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Mülakat Kaydı</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <!--<div class="panel panel-default">-->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form role="form" method="POST" action="">
+                                {{ form.hidden_tag() }}
+                                <div class="form-group row">
+                                    {{ form.date.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.date(class="form-control", type="date") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.time.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.time(class="form-control") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.ku1.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.ku1(class="form-control") }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form.ku2.label(class="col-sm-2 col-form-label", style="font-weight:normal;") }}
+                                    <div class="col-sm-10">{{ form.ku2(class="form-control") }}</div>
+                                </div>
+                                <br>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-default">Kaydet</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <!--</div>-->
+        </div>
+    </div>
+{% endblock content %}

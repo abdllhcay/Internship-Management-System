@@ -6,28 +6,33 @@
     <script src="../static/jquery.dataTables.min.js"></script>
     <script src="../static/dataTables.bootstrap.min.js"></script>
     <script src="../static/dataTables.responsive.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+    <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+    <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
 {% endblock header %}
 
 {% block content %}
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h3 class="page-header">Öğrenci Listesi</h3>
+            <h3 class="page-header">Mülakat Listesi</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             <!--<div class="panel panel-default">-->
-            <div class="panel-body">
-                <table style="width:100%" class="table table-striped table-bordered table-hover" id="student-list-table">
+            <div class="panel-body" id="deneme">
+                <table style="width:100%" class="table table-striped table-bordered table-hover" id="interview-list">
                     <thead>
                         <tr>
                             <th>Öğrenci No</th>
                             <th>Ad ve Soyad</th>
                             <th>Program</th>
-                            <th>Toplam Gün Sayısı</th>
-                            <th>Kabul Edilen Gün Sayısı</th>
-                            <th>Durum</th>
+                            <th>Mülakat Tarihi</th>
+                            <th>Mülakat Saati</th>
+                            <th>Komisyon Üyesi 1</th>
+                            <th>Komisyon Üyesi 2</th>
                             <th><i class="fas fa-ellipsis-h fa-fw"></i></th>
                         </tr>
                     </thead>
@@ -39,12 +44,9 @@
                                 <td>{{ row[3] }}. Öğretim</td>
                                 <td>{{ row[4] }}</td>
                                 <td>{{ row[5] }}</td>
-                                {% if row[6] == 1 %}
-                                    <td style="background-color:#5CB85C;"><font color="white"> TAMAMLADI</font></td>
-                                {% else %}
-                                    <td style="background-color:#D9534F;"><font color="white"> TAMAMLAMADI</font></td>
-                                {% endif %}
-                                <td><a href="/internship_registration?no={{ row[0] }}"><i class="fas fa-info-circle fa-lg"></i></a> &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="fas fa-plus-circle fa-lg"></i></a>  &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="far fa-trash-alt fa-lg"></i></a></td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td><a href="/interview_result?mulakat={{ row[8] }}"><i class="far fa-clipboard"></i></a> &nbsp; <a href="#"><i class="far fa-trash-alt"></i></a> </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -54,9 +56,9 @@
         </div>
     </div>
 </div>
-    <script>
+<script>
     $(document).ready(function() {
-        $('#student-list-table').DataTable({
+        $('#interviewd-list').DataTable({
             responsive: true
         });
     });

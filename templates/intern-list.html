@@ -12,22 +12,25 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h3 class="page-header">Öğrenci Listesi</h3>
+            <h3 class="page-header">Staj Listesi</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             <!--<div class="panel panel-default">-->
             <div class="panel-body">
-                <table style="width:100%" class="table table-striped table-bordered table-hover" id="student-list-table">
+                <table style="width:100%" class="table table-striped table-bordered table-hover" id="student-list">
                     <thead>
                         <tr>
                             <th>Öğrenci No</th>
                             <th>Ad ve Soyad</th>
-                            <th>Program</th>
-                            <th>Toplam Gün Sayısı</th>
-                            <th>Kabul Edilen Gün Sayısı</th>
-                            <th>Durum</th>
+                            <th>Sınıf</th>
+                            <th>Firma</th>
+                            <th>Şehir</th>
+                            <th>Konu</th>
+                            <th>Başlangıç Tarihi</th>
+                            <th>Bitiş Tarihi</th>
+                            <th>Gün</th>
                             <th><i class="fas fa-ellipsis-h fa-fw"></i></th>
                         </tr>
                     </thead>
@@ -36,15 +39,14 @@
                             <tr>
                                 <td>{{ row[0] }}</td>
                                 <td>{{ row[1] }} {{ row[2] }}</td>
-                                <td>{{ row[3] }}. Öğretim</td>
+                                <td>{{ row[3] }}</td>
                                 <td>{{ row[4] }}</td>
                                 <td>{{ row[5] }}</td>
-                                {% if row[6] == 1 %}
-                                    <td style="background-color:#5CB85C;"><font color="white"> TAMAMLADI</font></td>
-                                {% else %}
-                                    <td style="background-color:#D9534F;"><font color="white"> TAMAMLAMADI</font></td>
-                                {% endif %}
-                                <td><a href="/internship_registration?no={{ row[0] }}"><i class="fas fa-info-circle fa-lg"></i></a> &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="fas fa-plus-circle fa-lg"></i></a>  &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="far fa-trash-alt fa-lg"></i></a></td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td><a href="/interview_registration?staj_id={{ row[10] }}"><i class="far fa-edit"></i></a> &nbsp; <a href="#"><i class="far fa-trash-alt"></i></a> </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -56,7 +58,7 @@
 </div>
     <script>
     $(document).ready(function() {
-        $('#student-list-table').DataTable({
+        $('#student-list').DataTable({
             responsive: true
         });
     });

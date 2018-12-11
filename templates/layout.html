@@ -239,7 +239,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="{{ url_for("logout") }}"><i class="fa fa-sign-out-alt fa-fw"></i> Çıkış</a>
                         </li>
                     </ul>
                 </li>
@@ -264,15 +264,23 @@
                         <li>
                             <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Öğrenci<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="{{ url_for('student_list') }}">Öğrenci Listesi</a></li>
-                                <li><li><a href="{{ url_for('student_registration') }}">Öğrenci Kayıt</a></li></li>
+                                <li><a href="{{ url_for('student_list') }}"><i class="fa fa-angle-right fa-fw"></i> Öğrenci Listesi</a></li>
+                                <li><a href="{{ url_for('student_registration') }}"><i class="fa fa-angle-right fa-fw"></i> Öğrenci Kaydı</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="{{ url_for('internship_registration') }}"><i class="fa fa-briefcase fa-fw"></i> Staj Kayıt</a>
+                            <a href="#"><i class="fa fa-briefcase fa-fw"></i> Staj<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="{{ url_for('intern_list') }}"><i class="fa fa-angle-right fa-fw"></i> Staj Listesi</a></li>
+                                <li><a href="{{ url_for('internship_registration') }}"><i class="fa fa-angle-right fa-fw"></i> Staj Kaydı</a></li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="{{ url_for('appointment') }}"><i class="fa fa-calendar-check fa-fw"></i> Randevu</a>
+                            <a href="#"><i class="fa fa-calendar-check fa-fw"></i> Mülakat<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="{{ url_for('interview_list') }}"><i class="fa fa-angle-right fa-fw"></i> Mülakat Listesi</a></li>
+                                <li><a href="{{ url_for('internship_registration') }}"><i class="fa fa-angle-right fa-fw"></i> Sonuçlar</a></li>
+                            </ul>
                         </li>
                         <li>
                             <a href="{{ url_for('settings') }}"><i class="fa fa-cog fa-fw"></i> Ayarlar</a>
