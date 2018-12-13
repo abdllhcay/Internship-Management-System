@@ -3,7 +3,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h3 class="page-header">Mülakat Bilgileri</h3>
+            <h3 class="page-header">Mülakat Sonuçları</h3>
         </div>
     </div>
     <div class="row">
@@ -11,54 +11,38 @@
             <!--<div class="panel panel-default">-->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <form role="form" method="POST" action="">
-                                {{ form.hidden_tag() }}
-                                <div class="form-group row">
-                                    {{ form.devam.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.devam(class="form-control")}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.caba.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.caba(class="form-control")}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.vakit.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.vakit(class="form-control")}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.amir_davranis.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.amir_davranis(class="form-control")}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.ark_davranis.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.ark_davranis(class="form-control")}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.prove.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.prove(class="form-control", placeholder="0-100") }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.duzen.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.duzen(class="form-control", placeholder="0-100") }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.sunum.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.sunum(class="form-control", placeholder="0-100") }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.icerik.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.icerik(class="form-control", placeholder="0-100") }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form.mulakat.label(class="col-sm-3 col-form-label", style="font-weight:normal;") }}
-                                    <div class="col-sm-6">{{ form.mulakat(class="form-control", placeholder="0-100") }}</div>
-                                </div>
-                                <br>
-                                <div style="margin-left:380px">
-                                    <button type="submit" class="btn btn-default">Kaydet</button>
-                                </div>
+                        <div class="col-sm-12">
+                            <form class="form-inline" action="">
+                                <select name="year" class="form-control">
+                                    {% for year in years %}
+                                        <option value="{{ year[0] }}">{{ year[0] }}</option>
+                                    {% endfor %}
+                                </select>
+                                &emsp;<button type="submit" class="btn btn-default">Getir</button>
                             </form>
+                            <br><br>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Öğrenci No</th>
+                                        <th>Ad ve Soyad</th>
+                                        <th>Kurum</th>
+                                        <th>Staj Günü</th>
+                                        <th>Kabul Edilen Gün</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for result in results %}
+                                        <tr>
+                                            <td>{{ result[0] }}</td>
+                                            <td>{{ result[1] }} {{ result[2] }}</td>
+                                            <td>{{ result[3] }}</td>
+                                            <td>{{ result[4] }}</td>
+                                            <td>{{ result[5] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

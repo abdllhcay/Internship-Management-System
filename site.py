@@ -8,6 +8,7 @@ import sys
 import datetime
 import random
 import hashlib
+import itertools
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -42,15 +43,8 @@ def home():
         firm_count = cursor.fetchone()
         cursor.execute("SELECT konu FROM konular")
         subject_list = cursor.fetchall()
-        cursor.execute("SELECT DISTINCT RIGHT(basTarih, 4) FROM staj ORDER BY RIGHT(basTarih, 4) ASC")
-        date_list = cursor.fetchall()
 
-        subject_list = ["Yazilim", "Donanim", "Bilim", "Arge"]
-        cursor.execute("SELECT RIGHT(basTarih,4), konu, COUNT(stajID) FROM staj GROUP BY RIGHT(basTarih,4), konu ORDER BY RIGHT(basTarih,4) ASC")
-        bar_konu = cursor.fetchall()
-        print "----------------"
-        print date_list
-        return render_template("home.html", results = student_list, student_count = student_count, intern_count = intern_count, total_day = total_day, firm_count = firm_count, subject_list = subject_list, date_list = date_list, bar_konu = bar_konu)
+        return render_template("home.html", results = student_list, student_count = student_count, intern_count = intern_count, total_day = total_day, firm_count = firm_count, subject_list = subject_list)
 
 # Login ekranı
 @app.route("/login", methods = ["POST", "GET"])
@@ -90,6 +84,16 @@ def student_list():
 
         return render_template("student-list.html", title = "Öğrenci Listesi", results = results)
 
+# Öğrenci detay
+@app.route("/student_details", methods = ["POST", "GET"])
+def student_details():
+    no = request.args.get("no")
+    cursor.execute("SELECT * FROM student WHERE no='%s'" %no)
+    student_details = cursor.fetchone()
+    cursor.execute("SELECT * FROM staj WHERE ogrNo='%s'" %no)
+    intern_details = cursor.fetchall()
+
+    return render_template("student-details.html", title="Öğrenci Detay", student_details = student_details, intern_details = intern_details)
 
 # Öğrenci kayıt sayfası
 @app.route("/student_registration", methods = ["POST", "GET"])
@@ -239,8 +243,8 @@ def interview_list():
 
 
 # Mülakat kayıt sayfası
-@app.route("/interview_result", methods = ["POST", "GET"])
-def interview_result():
+@app.route("/do_interview", methods = ["POST", "GET"])
+def do_interview():
     if not session["logged_in"]:
         return redirect(url_for("login"))
     else:
@@ -280,11 +284,19 @@ def interview_result():
         else:
             logging.error(form.errors)
 
+        return render_template("do-interview.html", form = form)
 
+@app.route("/interview_result", methods = ["POST", "GET"])
+def interview_result():
+    year = request.args.get("year")
 
-            #logging.error(str(devam) + " " + str(caba) + " " + str(vakit) + " " + str(amir_davranis) + " " + str(ark_davranis) + " " + str(prove) + " " + str(duzen) + " " + str(sunum) + " " + str(icerik) + " " + str(mulakat) + " " + str(puan) + " " + str(kabul_gun))
+    cursor.execute("SELECT DISTINCT RIGHT(tarih, 4) FROM mulakat")
+    years = cursor.fetchall()
 
-        return render_template("interview-result.html", form = form)
+    cursor.execute("SELECT student.no, student.ad, student.soyad, staj.firma, staj.gun, mulakat.sonuc FROM mulakat JOIN staj ON staj.stajID=mulakat.stajID JOIN student ON staj.ogrNo=student.no WHERE RIGHT(mulakat.tarih, 4) = '%s'" %year)
+    results = cursor.fetchall()
+
+    return render_template("interview-result.html", years = years, results = results)
 
 
 # Ayarlar sayfası
@@ -333,6 +345,40 @@ def settings():
 
         return render_template("settings.html", title = "Ayarlar", form = settings_form, firms = firms, subjects = subjects, members = members)
 
+@app.route("/statistics", methods = ["POST", "GET"])
+def statistics():
+    # cursor.execute("SELECT DISTINCT RIGHT(basTarih, 4) FROM staj ORDER BY RIGHT(basTarih, 4) ASC")
+    # labels = cursor.fetchall()
+    #
+    # cursor.execute("SELECT konu FROM konular")
+    # subjects = cursor.fetchall()
+    #
+    # cursor.execute("SELECT RIGHT(basTarih,4), konu, COUNT(stajID) FROM staj GROUP BY RIGHT(basTarih,4), konu ORDER BY RIGHT(basTarih,4) ASC")
+    # results = cursor.fetchall()
+    #
+    # values = []
+    # s = []
+    # l = []
+    #
+    # for i in subjects:
+    #     s.append(i[0])
+    #
+    # for i in labels:
+    #     l.append(i[0])
+    #
+    # old_year = 0
+    # for result in results:
+    #     if old_year != result[0]:
+    #         values.extend(4*[0])
+    #         old_year = result[0]
+    #
+    #     index = l.index(result[0]) * 4 + s.index(result[1])
+    #     values[index] = result[2]
+
+    cursor.execute("SELECT konu, COUNT(konu) FROM staj GROUP BY konu")
+    results = cursor.fetchall()
+
+    return render_template("statistics.html", title="İstatistikler", results = results)
 
 if __name__ == "__main__":
     app.run(debug = True, host = "0.0.0.0")

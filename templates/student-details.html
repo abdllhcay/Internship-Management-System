@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Öğrenci Bilgisi</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img src="https://liu.se/-/media/0-2017/11/sikander-islam-ambassador.jpg" class="img-thumbnail" width="180" height="200">
+                    </div>
+                    <div class="col-sm-4">
+                        <h2 style="font-family:Lato">{{ student_details[1] }} {{ student_details[2] }}</h2>
+                        <font face="Roboto">Bilgisayar Mühendisliği<br>{% if student_details[3] == 1 %}I. Öğretim{% else %}II. Öğretim{% endif %}<br>{{ student_details[0] }}<br><br>{% if student_details[6] == 1 %} <img src="../static/green.png"> {% else %} <img src="../static/red.png"> {% endif %}</font>
+                    </div>
+                    <div class="col-sm-2">
+                        <br><br><br><font face="Roboto">Toplam gün sayısı: &emsp;&emsp;{{ student_details[4] }}<br>Kabul edilen gün sayısı: {{ student_details[5] }}</font>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <br><br><h4>Staj Geçmişi</h4><hr>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Staj No</th>
+                                    <th scope="col">Firma</th>
+                                    <th scope="col">Şehir</th>
+                                    <th scope="col">Konu</th>
+                                    <th scope="col">Gün</th>
+                                    <th scope="col">Başlangıç Tarihi</th>
+                                    <th scope="col">Bitiş Tarihi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in intern_details %}
+                                    <tr>
+                                        <td>{{ detail[0] }}</td>
+                                        <td>{{ detail[2] }}</td>
+                                        <td>{{ detail[3] }}</td>
+                                        <td>{{ detail[4] }}</td>
+                                        <td>{{ detail[5] }}</td>
+                                        <td>{{ detail[6] }}</td>
+                                        <td>{{ detail[7] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

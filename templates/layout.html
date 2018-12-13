@@ -17,6 +17,14 @@
     <script src="../static/bootstrap.min.js"></script>
     <script src="../static/metisMenu.min.js"></script>
     <script src="../static/sb-admin-2.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
 
     <!-- Morris Charts JavaScript -->
     <script src="../static/raphael.min.js"></script>
@@ -239,7 +247,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="{{ url_for("logout") }}"><i class="fa fa-sign-out-alt fa-fw"></i> Çıkış</a>
+                        <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out-alt fa-fw"></i> Çıkış</a>
                         </li>
                     </ul>
                 </li>
@@ -279,8 +287,11 @@
                             <a href="#"><i class="fa fa-calendar-check fa-fw"></i> Mülakat<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="{{ url_for('interview_list') }}"><i class="fa fa-angle-right fa-fw"></i> Mülakat Listesi</a></li>
-                                <li><a href="{{ url_for('internship_registration') }}"><i class="fa fa-angle-right fa-fw"></i> Sonuçlar</a></li>
+                                <li><a href="{{ url_for('interview_result') }}"><i class="fa fa-angle-right fa-fw"></i> Sonuçlar</a></li>
                             </ul>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('statistics') }}"><i class="fa fa-chart-line fa-fw"></i> İstatistikler</a>
                         </li>
                         <li>
                             <a href="{{ url_for('settings') }}"><i class="fa fa-cog fa-fw"></i> Ayarlar</a>
