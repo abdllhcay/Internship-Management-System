@@ -8,7 +8,6 @@ import sys
 import datetime
 import random
 import hashlib
-import itertools
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -79,6 +78,11 @@ def student_list():
     if not session["logged_in"]:
         return redirect(url_for("login"))
     else:
+        no = request.args.get("delete")
+        if no != None:
+            cursor.execute("DELETE FROM student WHERE no='%s'" %no)
+            conn.commit()
+
         cursor.execute("SELECT * FROM student")
         results = cursor.fetchall()
 
@@ -88,10 +92,25 @@ def student_list():
 @app.route("/student_details", methods = ["POST", "GET"])
 def student_details():
     no = request.args.get("no")
+    okul = request.args.get("okul")
+    kurum = request.args.get("kurum")
+    gun = request.args.get("gun")
+
     cursor.execute("SELECT * FROM student WHERE no='%s'" %no)
     student_details = cursor.fetchone()
     cursor.execute("SELECT * FROM staj WHERE ogrNo='%s'" %no)
     intern_details = cursor.fetchall()
+
+    if okul != None:
+        cursor.execute("INSERT INTO dgs(no, okul, kurum, gun) VALUES('%s', '%s', '%s', '%s')" %(no, okul.upper(), kurum.upper(), gun))
+        cursor.execute("SELECT total_day FROM student WHERE no='%s'" % no)
+        result = cursor.fetchone()
+        total_day = result[0] + int(gun)
+        cursor.execute("UPDATE student SET total_day='%d' WHERE no='%s'" % (total_day, no))
+        cursor.execute("SELECT accepted_day FROM student WHERE no='%s'" % no)
+        eski_kabul_gun = cursor.fetchone()
+        cursor.execute("UPDATE student SET accepted_day='%d' WHERE no='%s'" % (eski_kabul_gun[0] + int(gun) / 2, no))
+        conn.commit()
 
     return render_template("student-details.html", title="Öğrenci Detay", student_details = student_details, intern_details = intern_details)
 
@@ -102,12 +121,13 @@ def student_registration():
         return redirect(url_for("login"))
     else:
         form = StudentRegistration()
+        dgs = 0
 
         if form.validate_on_submit():
+            if form.dgs.data:
+                dgs = 1
             try:
-                cursor.execute(
-                    "INSERT INTO student(no, ad, soyad, program, total_day, accepted_day, status, record) VALUES ('%s', '%s', '%s', '%s', 0, 0, 0, 0)" % (
-                        form.no.data, form.name.data, form.surname.data, form.program.data))
+                cursor.execute("INSERT INTO student(no, ad, soyad, program, total_day, accepted_day, status, dgs) VALUES ('%s', '%s', '%s', '%s', 0, 0, 0, '%d')" % (form.no.data, form.name.data, form.surname.data, form.program.data, dgs))
                 conn.commit()
                 flash(u"Öğrenci kaydı başarıyla yapıldı.", "success")
                 return redirect(url_for("student_registration"))
@@ -124,8 +144,7 @@ def intern_list():
     if not session["logged_in"]:
         return redirect(url_for("login"))
     else:
-        cursor.execute(
-            "SELECT s.no, s.ad, s.soyad, staj.sinif, staj.firma, staj.sehir, staj.konu, staj.basTarih, staj.bitTarih, staj.gun, staj.stajID FROM student s JOIN staj ON s.no=staj.ogrNo ")
+        cursor.execute("SELECT s.no, s.ad, s.soyad, staj.sinif, staj.firma, staj.sehir, staj.konu, staj.basTarih, staj.bitTarih, staj.gun, staj.stajID FROM student s JOIN staj ON s.no=staj.ogrNo ORDER BY RIGHT(staj.basTarih, 4) DESC")
         results = cursor.fetchall()
 
         return render_template("intern-list.html", title = "Staj Listesi", results = results)
@@ -236,7 +255,7 @@ def interview_list():
     if not session["logged_in"]:
         return redirect(url_for("login"))
     else:
-        cursor.execute("SELECT st.no, st.ad, st.soyad, st.program, m.tarih, m.saat, m.ku1, m.ku2, m.mulakatID FROM mulakat m JOIN staj s ON m.stajID=s.stajID JOIN student st ON s.ogrNo=st.no")
+        cursor.execute("SELECT st.no, st.ad, st.soyad, st.program, m.tarih, m.saat, m.ku1, m.ku2, m.mulakatID FROM mulakat m JOIN staj s ON m.stajID=s.stajID JOIN student st ON s.ogrNo=st.no WHERE RIGHT(s.basTarih, 4) = '%s' AND s.degerlendirme='0'" %str(datetime.date.today().year))
         results = cursor.fetchall()
 
         return render_template("interview-list.html", results=results)
@@ -273,6 +292,8 @@ def do_interview():
                 cursor.execute("SELECT accepted_day FROM student WHERE no='%s'" % results[0][1])
                 eski_kabul_gun = cursor.fetchone()
                 cursor.execute("UPDATE student SET accepted_day='%d' WHERE no='%s'" % (eski_kabul_gun[0] + kabul_gun, results[0][1]))
+                conn.commit()
+                cursor.execute("UPDATE mulakat SET sonuc='%d' WHERE mulakatID='%s'" %(kabul_gun, mulakat_id))
                 conn.commit()
 
                 if (eski_kabul_gun[0] + kabul_gun) >= 57:
@@ -347,38 +368,28 @@ def settings():
 
 @app.route("/statistics", methods = ["POST", "GET"])
 def statistics():
-    # cursor.execute("SELECT DISTINCT RIGHT(basTarih, 4) FROM staj ORDER BY RIGHT(basTarih, 4) ASC")
-    # labels = cursor.fetchall()
-    #
-    # cursor.execute("SELECT konu FROM konular")
-    # subjects = cursor.fetchall()
-    #
-    # cursor.execute("SELECT RIGHT(basTarih,4), konu, COUNT(stajID) FROM staj GROUP BY RIGHT(basTarih,4), konu ORDER BY RIGHT(basTarih,4) ASC")
-    # results = cursor.fetchall()
-    #
-    # values = []
-    # s = []
-    # l = []
-    #
-    # for i in subjects:
-    #     s.append(i[0])
-    #
-    # for i in labels:
-    #     l.append(i[0])
-    #
-    # old_year = 0
-    # for result in results:
-    #     if old_year != result[0]:
-    #         values.extend(4*[0])
-    #         old_year = result[0]
-    #
-    #     index = l.index(result[0]) * 4 + s.index(result[1])
-    #     values[index] = result[2]
+    year = request.args.get("year")
 
+    cursor.execute("SELECT DISTINCT RIGHT(basTarih, 4) FROM staj ORDER BY RIGHT(basTarih, 4) DESC")
+    years = cursor.fetchall()
     cursor.execute("SELECT konu, COUNT(konu) FROM staj GROUP BY konu")
     results = cursor.fetchall()
 
-    return render_template("statistics.html", title="İstatistikler", results = results)
+    if year and year != "all":
+        cursor.execute("SELECT konu, COUNT(konu) FROM staj WHERE RIGHT(basTarih, 4)='%s' GROUP BY konu " %year)
+        results = cursor.fetchall()
+
+    cursor.execute("SELECT s.konu, SUM(s.gun), SUM(m.sonuc) FROM staj s JOIN mulakat m ON s.stajID=m.stajID GROUP BY s.konu")
+    results2 = cursor.fetchall()
+    cursor.execute("SELECT s.sehir, SUM(s.gun), SUM(m.sonuc) FROM staj s JOIN mulakat m ON s.stajID=m.stajID GROUP BY s.sehir")
+    results3 = cursor.fetchall()
+
+    r2 = []
+    r3 = []
+    r2 = [(i[0], int(i[2] * 100 / int(i[1]))) for i in results2]
+    r3 = [(i[0], int(i[2] * 100 / int(i[1]))) for i in results3]
+
+    return render_template("statistics.html", title="İstatistikler", years = years, results = results, results2 = r2, results3 = r3)
 
 if __name__ == "__main__":
     app.run(debug = True, host = "0.0.0.0")

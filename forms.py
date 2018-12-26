@@ -11,20 +11,17 @@ class Login(FlaskForm):
     remember = BooleanField(u"Beni hatırla")
     submit = SubmitField("Giris")
 
-
 class StudentRegistration(FlaskForm):
     no = StringField(u"Öğrenci No", validators = [DataRequired()])
     name = StringField(u"Ad", validators = [DataRequired()])
     surname = StringField(u"Soyad", validators = [DataRequired()])
     program = SelectField(u"Program", choices = [("1", u"1. Öğretim"), ("2", u"2. Öğretim")])
-
+    dgs = BooleanField(u"DGS")
 
 class Settings(FlaskForm):
     new_member = StringField(u"Komisyon Üyesi")
-    date = DateField("Tarih", format = '%d-%m-%Y')
     new_firm = StringField("Kurum")
     new_subject = StringField("Konu")
-
 
 class InternshipRegistration(FlaskForm):
     grade = IntegerField(u"Sınıf", validators = [DataRequired()])
@@ -51,7 +48,6 @@ class InterviewResult(FlaskForm):
     sunum = IntegerField(u"Sunum", validators = [DataRequired()])
     icerik = IntegerField(u"İçerik", validators = [DataRequired()])
     mulakat = IntegerField(u"Mülakat", validators = [DataRequired()])
-
 
 class InterviewRegistration(FlaskForm):
     date = DateField(u"Tarih", validators = [DataRequired()])

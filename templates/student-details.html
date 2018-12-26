@@ -15,10 +15,10 @@
                     </div>
                     <div class="col-sm-4">
                         <h2 style="font-family:Lato">{{ student_details[1] }} {{ student_details[2] }}</h2>
-                        <font face="Roboto">Bilgisayar Mühendisliği<br>{% if student_details[3] == 1 %}I. Öğretim{% else %}II. Öğretim{% endif %}<br>{{ student_details[0] }}<br><br>{% if student_details[6] == 1 %} <img src="../static/green.png"> {% else %} <img src="../static/red.png"> {% endif %}</font>
+                        <font face="Roboto">Bilgisayar Mühendisliği{% if student_details[7] == 1 %} (DGS){% endif %}<br>{% if student_details[3] == 1 %}I. Öğretim{% else %}II. Öğretim{% endif %}<br>{{ student_details[0] }}<br><br>{% if student_details[6] == 1 %} <img src="../static/green.png"> {% else %} <img src="../static/red.png"> {% endif %}{% if student_details[7] == 1 %}&nbsp;&nbsp;<a href="#" data-toggle='modal' data-target='#internModal' ><img src="../static/form.png"></a>{% endif %}</font>
                     </div>
                     <div class="col-sm-2">
-                        <br><br><br><font face="Roboto">Toplam gün sayısı: &emsp;&emsp;{{ student_details[4] }}<br>Kabul edilen gün sayısı: {{ student_details[5] }}</font>
+                        <br><br><br><font face="Roboto">Toplam gün sayısı: &emsp;&emsp;{{ student_details[4] }}<br>Kabul edilen gün sayısı: {{ student_details[5] }}<br></font>
                     </div>
                 </div>
                 <div class="row">
@@ -56,4 +56,39 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="internModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Staj ekleme</h4>
+            </div>
+            <form role="form" action="">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <p class="col-sm-2 col-form-label" style="font-weight:normal;">Okul </p>
+                        <div class="col-sm-10"><input class="form-control" name="okul"></div>
+                    </div>
+                    <div class="form-group row">
+                        <p class="col-sm-2 col-form-label" style="font-weight:normal;">Kurum </p>
+                        <div class="col-sm-10"><input class="form-control" name="kurum"></div>
+                    </div>
+                    <div class="form-group row">
+                        <p class="col-sm-2 col-form-label" style="font-weight:normal;">Staj Günü </p>
+                        <div class="col-sm-10"><input class="form-control" name="gun"></div>
+                    </div>
+                    <input type="hidden" name="no" value="{{ student_details[0] }}">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}

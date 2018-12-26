@@ -44,7 +44,7 @@
                                 {% else %}
                                     <td><img src="../static/red.png" width="20" height="20"></td>
                                 {% endif %}
-                                <td><a href="/student_details?no={{ row[0] }}"><i class="fas fa-info-circle fa-lg"></i></a> &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="fas fa-plus-circle fa-lg"></i></a>  &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="far fa-trash-alt fa-lg"></i></a></td>
+                                <td><a href="/student_details?no={{ row[0] }}"><i class="fas fa-info-circle fa-lg" data-toggle="tooltip" data-placement="bottom" title="Detay"></i></a> &nbsp; <a href="/internship_registration?no={{ row[0] }}"><i class="fas fa-plus-circle fa-lg" data-toggle="tooltip" data-placement="bottom" title="Staj ekle"></i></a>  &nbsp; <a href="/student_list?delete={{ row[0] }}"><i class="far fa-trash-alt fa-lg" data-toggle="tooltip" data-placement="bottom" title="Sil"></i></a>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -54,11 +54,13 @@
         </div>
     </div>
 </div>
-    <script>
-    $(document).ready(function() {
-        $('#student-list-table').DataTable({
-            responsive: true
-        });
+
+<script>
+$(document).ready(function() {
+    $('#student-list-table').DataTable({
+        responsive: true
     });
-    </script>
+});
+</script>
+
 {% endblock content %}

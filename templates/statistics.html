@@ -9,25 +9,139 @@
     </div>
     <div class="row">
         <div class="col-lg-12">
-            <!--<div class="panel panel-default">-->
             <div class="panel-body">
-                <div id="morris-donut-chart"></div>
+                <div class="row">
+                    <form class="form-inline" action="">
+                        <select name="year" class="form-control">
+                            <option value="all">Tüm yıllar</option>
+                            {% for year in years %}
+                                <option value="{{ year[0] }}">{{ year[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        &emsp;<button type="submit" class="btn btn-default">Getir</button>
+                    </form>
+                    <br>
+                </div>
             </div>
-            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Konu Dağılımı
+                </div>
+                <!-- Yıllara göre konu dağılımı -->
+                <div class="panel-body">
+                    <div class="row">
+                        <canvas id="konu-dagilimi"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Konu Başarı Oranı
+                </div>
+                <!-- Yıllara göre konu dağılımı -->
+                <div class="panel-body">
+                    <div class="row">
+                        <canvas id="konu-basari-orani"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> İl Başarı Oranı
+                </div>
+                <!-- Yıllara göre konu dağılımı -->
+                <div class="panel-body">
+                    <div class="row">
+                        <canvas id="il-basari-orani"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    Morris.Donut({
-      element: 'morris-donut-chart',
-      data: [
-        {% for i in range(0, (results|length)-1) %}
-            {label: "{{ result[i] }}", value: {{ result[i+1] }} },
-        {% endfor %}
-        { label: "" }
-      ]
+    new Chart(document.getElementById("konu-dagilimi"), {
+        type: 'pie',
+        data: {
+            labels: [
+                {% for i in range(0, (results|length)-1) %}
+                    "{{ results[i][0] }}",
+                {% endfor %}
+                "{{ results[(results|length)-1][0] }}"
+            ],
+            datasets: [{
+                label: "Population (millions)",
+                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                data: [
+                    {% for i in range(0, (results|length)-1) %}
+                        {{ results[i][1] }},
+                    {% endfor %}
+                    {{ results[(results|length)-1][1] }}
+                ]
+            }]
+        }
     });
 </script>
-
+<script>
+    new Chart(document.getElementById("konu-basari-orani"), {
+        type: 'bar',
+        data: {
+            labels: [
+                {% for i in range(0, (results2|length)-1) %}
+                    "{{ results2[i][0] }}",
+                {% endfor %}
+                "{{ results2[(results2|length)-1][0] }}"
+            ],
+            datasets: [
+                {
+                    label: "Başarı oranı (%)",
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                    data: [
+                        {% for i in range(0, (results2|length)-1) %}
+                            {{ results2[i][1] }},
+                        {% endfor %}
+                        {{ results2[(results2|length)-1][1] }}
+                    ]
+                }
+            ]
+        }
+    });
+</script>
+<script>
+    new Chart(document.getElementById("il-basari-orani"), {
+        type: 'bar',
+        data: {
+            labels: [
+                {% for i in range(0, (results3|length)-1) %}
+                    "{{ results3[i][0] }}",
+                {% endfor %}
+                "{{ results3[(results3|length)-1][0] }}"
+            ],
+            datasets: [
+                {
+                    label: "Başarı oranı (%)",
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#5bbbe3","#d54284","#f1cace","#d19610","#f7f15d","#61d21f","#c17319","#b86a78"],
+                    data: [
+                        {% for i in range(0, (results3|length)-1) %}
+                            {{ results3[i][1] }},
+                        {% endfor %}
+                        {{ results3[(results3|length)-1][1] }}
+                    ]
+                }
+            ]
+        }
+    });
+</script>
 {% endblock content %}
